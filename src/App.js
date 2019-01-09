@@ -87,7 +87,6 @@ class App extends React.Component {
     return (
       <div>
         <NavBar />
-
         <Provider value={this.state}>
           <Router>
             <Results path="/" />
