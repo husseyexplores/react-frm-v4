@@ -1,4 +1,4 @@
-export default function breedReducer(state = 'Seattle, WA', action) {
+export default function breedReducer(state = '', action) {
   switch (action.type) {
     case 'SET_BREED':
       return action.payload;
