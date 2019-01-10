@@ -1,29 +1,15 @@
-import React from 'react';
-import { Link } from '@reach/router';
-import styled from '@emotion/styled';
-
-const StyledHeader = styled('header')`
-  background-color: #333;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-`;
-
-const StyledLink = styled(Link)`
-  &:hover {
-    text-decoration: underline;
-  }
-`;
+import React from 'preact-compat';
+import { Link } from 'preact-router';
 
 const NavBar = () => (
-  <StyledHeader>
-    <StyledLink to="/">Adopt Me!</StyledLink>
-    <StyledLink to="/search">
+  <header>
+    <Link href="/">Adopt Me!</Link>
+    <Link href="/search">
       <span aria-label="search" role="img">
         🔍
       </span>
-    </StyledLink>
-  </StyledHeader>
+    </Link>
+  </header>
 );
 
 export default NavBar;

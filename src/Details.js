@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'preact-compat';
 import pf from 'petfinder-client';
-import { navigate } from '@reach/router';
+import { route } from 'preact-router';
 import Carousel from './Carousel';
 import Modal from './Modal';
 
@@ -40,7 +40,7 @@ class Details extends React.Component {
         });
       })
       .catch(() => {
-        navigate('/');
+        route('/');
       });
   }
 
@@ -71,10 +71,12 @@ class Details extends React.Component {
           <p>{description}</p>
           {showModal ? (
             <Modal>
-              <h1>Would you like to adopt {name}?</h1>
-              <div className="buttons">
-                <button onClick={this.toggleModal}>Yes</button>
-                <button onClick={this.toggleModal}>No</button>
+              <div>
+                <h1>Would you like to adopt {name}?</h1>
+                <div className="buttons">
+                  <button onClick={this.toggleModal}>Yes</button>
+                  <button onClick={this.toggleModal}>No</button>
+                </div>
               </div>
             </Modal>
           ) : null}

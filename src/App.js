@@ -1,6 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Router } from '@reach/router';
+import React from 'preact-compat';
+import ReactDOM from 'preact-compat';
+import { Router } from 'preact-router';
 import pf from 'petfinder-client';
 import { Provider } from './SearchContext';
 
@@ -8,8 +8,6 @@ import NavBar from './NavBar';
 import Results from './Results';
 import Details from './Details';
 import SearchParams from './SearchParams';
-import store from './store';
-import { Provider as ReduxProvider } from 'react-redux';
 
 const petfinder = pf({
   key: process.env.API_KEY,
