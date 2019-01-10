@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import pf from 'petfinder-client';
 import Pet from './Pet';
 import { Consumer } from './SearchContext';
@@ -79,8 +78,3 @@ export default function ResultsWithContextProps(props) {
     </Consumer>
   );
 }
-
-// const mapStateToProps = ({ location }) => ({
-//   location
-// });
-// export default connect(mapStateToProps)(ResultsWithContextProps);
