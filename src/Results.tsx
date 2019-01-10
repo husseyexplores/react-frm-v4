@@ -1,17 +1,33 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import pf from 'petfinder-client';
+import pf, { Pet as PetType } from 'petfinder-client';
+import { RouteComponentProps, navigate } from '@reach/router';
 import Pet from './Pet';
 import { Consumer } from './SearchContext';
 import SearchBox from './SearchBox';
+
+if (!process.env.API_KEY || !process.env.API_SECRET) {
+  throw new Error('No API Key is defined');
+}
 
 const petfinder = pf({
   key: process.env.API_KEY,
   secret: process.env.API_SECRET
 });
 
-class Results extends React.Component {
-  constructor(props) {
+interface Props {
+  searchParams: {
+    location: string,
+    animal: string,
+    breed: string,
+  }
+}
+
+interface State {
+  pets: PetType[]
+}
+
+class Results extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -19,16 +35,17 @@ class Results extends React.Component {
     };
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     this.search();
   }
 
-  search = () => {
+  public search = () => {
     const { location, animal, breed } = this.props.searchParams;
     petfinder.pet
       .find({ location: location, animal, breed, output: 'full' })
       .then(data => {
-        let pets;
+        let pets: PetType[];
+
         if (data.petfinder.pets && data.petfinder.pets.pet) {
           if (Array.isArray(data.petfinder.pets.pet)) {
             pets = data.petfinder.pets.pet;
@@ -38,13 +55,12 @@ class Results extends React.Component {
         } else {
           pets = [];
         }
-        this.setState({
-          pets: pets
-        });
-      });
+        this.setState({ pets });
+      })
+      .catch(() => navigate('/'));
   };
 
-  render() {
+  public render() {
     return (
       <div className="search">
         <SearchBox search={this.search} />
@@ -72,15 +88,10 @@ class Results extends React.Component {
   }
 }
 
-export default function ResultsWithContextProps(props) {
+export default function ResultsWithContextProps(props: RouteComponentProps) {
   return (
     <Consumer>
       {context => <Results {...props} searchParams={context} />}
     </Consumer>
   );
 }
-
-// const mapStateToProps = ({ location }) => ({
-//   location
-// });
-// export default connect(mapStateToProps)(ResultsWithContextProps);

@@ -1,21 +1,35 @@
 import React from 'react';
-import pf from 'petfinder-client';
-import { navigate } from '@reach/router';
+import pf, { PetMedia, PetResponse } from 'petfinder-client';
+import { navigate, RouteComponentProps } from '@reach/router';
 import Carousel from './Carousel';
 import Modal from './Modal';
+
+if (!process.env.API_KEY || !process.env.API_SECRET) {
+  throw new Error('No API Key is defined');
+}
 
 const petfinder = pf({
   key: process.env.API_KEY,
   secret: process.env.API_SECRET
 });
 
-class Details extends React.Component {
-  state = {
+class Details extends React.Component<RouteComponentProps<{ id: string }>> {
+  public state = {
     loading: true,
-    showModal: false
+    showModal: false,
+    name: '',
+    animal: '',
+    location: '',
+    description: '',
+    media: {} as PetMedia,
+    breed: '',
   };
 
-  componentDidMount() {
+  public componentDidMount() {
+    if (!this.props.id) {
+      navigate('/');
+      return;
+    }
     petfinder.pet
       .get({
         output: 'full',
@@ -23,6 +37,7 @@ class Details extends React.Component {
       })
       .then(data => {
         const pet = data.petfinder.pet;
+        if (!pet) throw new Error('Undefined response from the API');
         let breed;
         if (Array.isArray(pet.breeds.breed)) {
           breed = pet.breeds.breed.join(', ');
@@ -44,9 +59,9 @@ class Details extends React.Component {
       });
   }
 
-  toggleModal = () => this.setState({ showModal: !this.state.showModal });
+  public toggleModal = () => this.setState({ showModal: !this.state.showModal });
 
-  render() {
+  public render() {
     if (this.state.loading) {
       return <h1>loading … </h1>;
     }
